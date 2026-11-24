@@ -24,36 +24,13 @@ O robô pode se mover para cima, para baixo, para a esquerda e para a direita. O
 
 O código original está na pasta [`simulador/`](simulador/), com a licença MIT preservada. A referência ao repositório e ao commit utilizado está em [`simulador/ORIGEM.md`](simulador/ORIGEM.md). A solução da atividade fica separada, na pasta [`navegacao/`](navegacao/).
 
-## Parte 1 — Encontrando o menor caminho
-
-A solução começa consultando o serviço `/get_map`, que retorna o mapa completo. Com esses dados, o programa monta a matriz e identifica as posições do robô, do alvo e das paredes. As coordenadas seguem a ordem `(linha, coluna)`.
-
-Para calcular a rota, foi utilizada a **busca em largura (BFS)**. Cada célula livre funciona como um vértice do grafo, e cada movimento permitido entre células vizinhas funciona como uma aresta. Como todos os movimentos custam um passo, a BFS encontra um caminho com o menor número de movimentos.
-
-A busca usa uma fila: primeiro verifica as posições a um passo do início, depois as posições a dois passos, e assim por diante. As células visitadas são registradas para evitar repetições. O programa também guarda de qual célula chegou a cada posição, permitindo reconstruir o caminho quando encontra o alvo.
-
-Depois do planejamento, a rota é convertida em comandos enviados ao serviço `/move_command`. O programa confere a posição retornada após cada movimento e salva um relatório com a rota planejada e o que foi executado. Se não houver caminho até o alvo, informa isso sem mover o robô.
-
-Os arquivos principais são:
-
-- [`navegacao/busca.py`](navegacao/busca.py): busca em largura e conversão da rota em movimentos.
-- [`navegacao/parte1.py`](navegacao/parte1.py): leitura do mapa, comunicação com o simulador e execução da rota.
-
-## Parte 2 — Construindo o mapa
-
-Nesta etapa, o mapa deverá ser construído a partir das observações do robô durante a exploração. O simulador disponibiliza as informações das células ao redor pelo tópico `/culling_games/robot_sensors`.
-
-Após o mapeamento, será necessário usar o mapa construído para reproduzir a rota da parte 1. Essa etapa ainda não foi implementada.
-
-## Como executar
+## Preparação do ambiente
 
 O ambiente utilizado foi Ubuntu 24.04, Python 3.12 e ROS 2 Jazzy, com `colcon` instalado. A comunicação foi testada com Cyclone DDS. Caso ele não esteja instalado em outro ambiente Jazzy:
 
 ```bash
 sudo apt install ros-jazzy-rmw-cyclonedds-cpp
 ```
-
-### Preparação
 
 Na raiz do repositório, crie o ambiente Python, instale as dependências e compile os pacotes do simulador:
 
@@ -69,7 +46,44 @@ source scripts/ambiente.bash
 
 O arquivo `scripts/ambiente.bash` carrega o ROS, o ambiente Python e os pacotes compilados. Ele deve ser carregado em cada terminal usado para executar o projeto. Também seleciona Cyclone DDS por padrão, pois houve perdas intermitentes de respostas nos testes com a configuração anterior.
 
-### Abrir o labirinto
+## Parte 1 — Encontrando o menor caminho
+
+A solução começa consultando o serviço `/get_map`, que retorna o mapa completo. Com esses dados, o programa monta a matriz e identifica as posições do robô, do alvo e das paredes. As coordenadas seguem a ordem `(linha, coluna)`.
+
+Para calcular a rota, foi utilizada a **busca em largura (BFS)**. Cada célula livre funciona como um vértice do grafo, e cada movimento permitido entre células vizinhas funciona como uma aresta. Como todos os movimentos custam um passo, a BFS encontra um caminho com o menor número de movimentos.
+
+A busca usa uma fila: primeiro verifica as posições a um passo do início, depois as posições a dois passos, e assim por diante. As células visitadas são registradas para evitar repetições. O programa também guarda de qual célula chegou a cada posição, permitindo reconstruir o caminho quando encontra o alvo.
+
+Depois do planejamento, a rota é convertida em comandos enviados ao serviço `/move_command`. O programa confere a posição retornada após cada movimento e salva um relatório com a rota planejada e o que foi executado. Se não houver caminho até o alvo, informa isso sem mover o robô.
+
+Os arquivos principais são:
+
+- [`navegacao/busca.py`](navegacao/busca.py): busca em largura e conversão da rota em movimentos.
+- [`navegacao/parte1.py`](navegacao/parte1.py): leitura do mapa, comunicação com o simulador e execução da rota.
+
+### Resultados
+
+A navegação foi testada com o simulador em três mapas:
+
+| Mapa | Movimentos planejados | Movimentos executados | Resultado |
+| --- | ---: | ---: | --- |
+| `test.csv` | 25 | 25 | Alvo alcançado |
+| `1.csv` | 102 | 102 | Alvo alcançado |
+| `2.csv` | 102 | 102 | Alvo alcançado |
+
+As rotas também foram comparadas com uma implementação independente de Dijkstra para conferir o custo mínimo. Dijkstra foi usado apenas nessa verificação; o algoritmo de navegação é a BFS.
+
+Os relatórios estão na pasta [`resultados/`](resultados/). Eles contêm o mapa inicial, a rota, os comandos, a quantidade de movimentos e a posição final. Os testes de integração foram executados com o simulador sem janela, em domínios ROS separados.
+
+### Demonstração
+
+Execução da parte 1, com o robô seguindo automaticamente a rota calculada com BFS até o alvo.
+
+![Robô percorrendo automaticamente a rota calculada com BFS](assets/parte1.gif)
+
+### Como executar
+
+#### Abrir o labirinto
 
 Em um terminal na raiz do repositório:
 
@@ -78,7 +92,7 @@ source scripts/ambiente.bash
 ros2 run cg maze -- --map test.csv
 ```
 
-### Executar a parte 1
+#### Executar a rota
 
 Com o simulador aberto, use outro terminal na raiz do repositório:
 
@@ -101,21 +115,7 @@ ros2 service call /reset cg_interfaces/srv/Reset "{is_random: false}"
 
 Mantenha apenas um simulador ativo no mesmo domínio ROS e não envie comandos manuais durante a navegação automática. Se o simulador já estava aberto antes de atualizar a configuração do projeto, encerre com `Ctrl+C` e abra novamente após carregar `scripts/ambiente.bash`.
 
-## Resultados da parte 1
-
-A navegação foi testada com o simulador em três mapas:
-
-| Mapa | Movimentos planejados | Movimentos executados | Resultado |
-| --- | ---: | ---: | --- |
-| `test.csv` | 25 | 25 | Alvo alcançado |
-| `1.csv` | 102 | 102 | Alvo alcançado |
-| `2.csv` | 102 | 102 | Alvo alcançado |
-
-As rotas também foram comparadas com uma implementação independente de Dijkstra para conferir o custo mínimo. Dijkstra foi usado apenas nessa verificação; o algoritmo de navegação é a BFS.
-
-Os relatórios estão na pasta [`resultados/`](resultados/). Eles contêm o mapa inicial, a rota, os comandos, a quantidade de movimentos e a posição final. Os testes de integração foram executados com o simulador sem janela, em domínios ROS separados.
-
-## Testes
+### Testes
 
 Foram criados dez testes automatizados: seis para a busca e quatro para a confirmação dos movimentos. Eles verificam situações como desvio de paredes, alvo inacessível e posição diferente da esperada.
 
@@ -133,3 +133,9 @@ python scripts/verificar_parte1_ros.py
 ```
 
 Se uma resposta de movimento não chegar em dez segundos, o cliente não repete o comando, pois o robô pode já ter se movido. Na parte 1, ele consulta o mapa para confirmar a posição esperada antes de continuar. Se não conseguir confirmar, interrompe a execução. Os testes finais com Cyclone DDS concluíram os três mapas sem precisar dessa recuperação.
+
+## Parte 2 — Construindo o mapa
+
+Nesta etapa, o mapa deverá ser construído a partir das observações do robô durante a exploração. O simulador disponibiliza as informações das células ao redor pelo tópico `/culling_games/robot_sensors`.
+
+Após o mapeamento, será necessário usar o mapa construído para reproduzir a rota da parte 1. Essa etapa ainda não foi implementada.
