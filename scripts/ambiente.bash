@@ -1,6 +1,8 @@
 # Carregue com: source scripts/ambiente.bash
 _PONDERADA_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 source /opt/ros/jazzy/setup.bash
+# Middleware usado nos testes deste projeto; permite escolha explícita externa.
+export RMW_IMPLEMENTATION="${RMW_IMPLEMENTATION:-rmw_cyclonedds_cpp}"
 source "$_PONDERADA_ROOT/.venv/bin/activate"
 _PONDERADA_SITE="$("$_PONDERADA_ROOT/.venv/bin/python" -c 'import sysconfig; print(sysconfig.get_path("purelib"))')"
 export PYTHONPATH="$_PONDERADA_SITE${PYTHONPATH:+:$PYTHONPATH}"
