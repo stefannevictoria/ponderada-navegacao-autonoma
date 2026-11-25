@@ -48,7 +48,6 @@ source scripts/ambiente.bash
 
 O arquivo `scripts/ambiente.bash` carrega o ROS, o ambiente Python e os pacotes compilados. Ele deve ser carregado em cada terminal usado para executar o projeto. Também seleciona Cyclone DDS por padrão, pois houve perdas intermitentes de respostas nos testes com a configuração anterior.
 
----
 
 ## Parte 1 — Encontrando o menor caminho
 
@@ -58,7 +57,7 @@ Para calcular a rota, foi utilizada a **busca em largura (BFS)**. Cada célula l
 
 A busca usa uma fila: primeiro verifica as posições a um passo do início, depois as posições a dois passos, e assim por diante. As células visitadas são registradas para evitar repetições. O programa também guarda de qual célula chegou a cada posição, permitindo reconstruir o caminho quando encontra o alvo.
 
-Depois do planejamento, a rota é convertida em comandos enviados ao serviço `/move_command`. O programa confere a posição retornada após cada movimento e salva um relatório com a rota planejada e o que foi executado. Se não houver caminho até o alvo, informa isso sem mover o robô.
+Depois do planejamento, a rota é convertida em comandos enviados ao serviço `/move_command`. O programa confere a posição retornada após cada movimento e salva um relatório com a rota planejada e o que foi executado. 
 
 Os arquivos principais são:
 
@@ -140,7 +139,6 @@ python scripts/verificar_parte1_ros.py
 
 Se uma resposta de movimento não chegar em dez segundos, o cliente não repete o comando, pois o robô pode já ter se movido. Na parte 1, ele consulta o mapa para confirmar a posição esperada antes de continuar. Se não conseguir confirmar, interrompe a execução. Os testes finais com Cyclone DDS concluíram os três mapas sem precisar dessa recuperação.
 
----
 
 ## Parte 2 — Construindo o mapa
 
@@ -180,7 +178,7 @@ Os relatórios e as comparações estão em [`resultados/parte2/`](resultados/pa
 
 No mapa `1.csv`, a parte 1 encontra uma rota de 102 movimentos usando o mapa completo. A parte 2 primeiro gasta 780 movimentos explorando e voltando ao início; depois percorre a mesma rota final de 102 movimentos usando o mapa que construiu. A comparação confere cada posição da rota, além da quantidade de passos. O resultado está em [`resultados/parte2/mapa1/comparacao.json`](resultados/parte2/mapa1/comparacao.json).
 
-Esse resultado comprova, nas execuções registradas, o que é pedido na segunda parte: o mapa construído pelos sensores foi suficiente para reproduzir a rota da primeira parte. A verificação aprovou a consistência das células observadas, a presença da rota no mapa construído, a igualdade da sequência de posições e do custo, além da conclusão dos movimentos.
+Esse resultado comprova, nas execuções registradas, que o mapa construído pelos sensores foi suficiente para reproduzir a rota da primeira parte. A verificação aprovou a consistência das células observadas, a presença da rota no mapa construído, a igualdade da sequência de posições e do custo, além da conclusão dos movimentos.
 
 Os comandos de execução das duas partes usam o mesmo mapa `1.csv` e a mesma posição inicial. Reinicie o labirinto entre as execuções para comparar as rotas. Tanto `test.csv` quanto `1.csv` vieram do repositório original do simulador. Os dois mapas em `tests/mapas/` foram criados apenas para testes adicionais.
 
