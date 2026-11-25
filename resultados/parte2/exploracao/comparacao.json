@@ -1,0 +1,9 @@
+{
+  "mapa_consistente": true,
+  "mapa_suficiente_para_rota_parte1": true,
+  "mesma_rota": true,
+  "mesmo_custo": true,
+  "execucao_confirmada": true,
+  "passos_parte1": 7,
+  "passos_parte2": 7
+}

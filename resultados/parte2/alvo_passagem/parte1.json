@@ -1,0 +1,103 @@
+{
+  "algoritmo": "BFS",
+  "criterio": "menor número de movimentos de custo unitário",
+  "mapa_inicial": [
+    [
+      "b",
+      "b",
+      "b",
+      "b",
+      "b",
+      "b",
+      "b"
+    ],
+    [
+      "b",
+      "r",
+      "f",
+      "t",
+      "f",
+      "f",
+      "b"
+    ],
+    [
+      "b",
+      "f",
+      "b",
+      "b",
+      "b",
+      "b",
+      "b"
+    ],
+    [
+      "b",
+      "f",
+      "f",
+      "f",
+      "f",
+      "f",
+      "b"
+    ],
+    [
+      "b",
+      "b",
+      "b",
+      "b",
+      "b",
+      "b",
+      "b"
+    ],
+    [
+      "b",
+      "b",
+      "b",
+      "b",
+      "b",
+      "b",
+      "b"
+    ],
+    [
+      "b",
+      "b",
+      "b",
+      "b",
+      "b",
+      "b",
+      "b"
+    ]
+  ],
+  "inicio": [
+    1,
+    1
+  ],
+  "alvo": [
+    1,
+    3
+  ],
+  "rota": [
+    [
+      1,
+      1
+    ],
+    [
+      1,
+      2
+    ],
+    [
+      1,
+      3
+    ]
+  ],
+  "movimentos": [
+    "right",
+    "right"
+  ],
+  "passos_planejados": 2,
+  "passos_executados": 2,
+  "posicao_final": [
+    1,
+    3
+  ],
+  "status": "concluido",
+  "confirmacoes_por_mapa": []
+}

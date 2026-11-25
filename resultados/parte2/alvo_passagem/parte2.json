@@ -1,0 +1,156 @@
+{
+  "status": "concluido",
+  "metodo_mapeamento": "DFS com sensores locais",
+  "algoritmo_rota": "BFS",
+  "inicio_relativo": [
+    0,
+    0
+  ],
+  "rota_reproduzida": [
+    [
+      0,
+      0
+    ],
+    [
+      0,
+      1
+    ],
+    [
+      0,
+      2
+    ]
+  ],
+  "passos_rota_planejados": 2,
+  "passos_rota_executados": 2,
+  "movimentos_rota": [
+    "right",
+    "right"
+  ],
+  "mapa_descoberto": [
+    [
+      "b",
+      "b",
+      "b",
+      "b",
+      "?",
+      "?",
+      "?"
+    ],
+    [
+      "b",
+      "r",
+      "f",
+      "t",
+      "?",
+      "?",
+      "?"
+    ],
+    [
+      "b",
+      "f",
+      "b",
+      "b",
+      "b",
+      "b",
+      "b"
+    ],
+    [
+      "b",
+      "f",
+      "f",
+      "f",
+      "f",
+      "f",
+      "b"
+    ],
+    [
+      "b",
+      "b",
+      "b",
+      "b",
+      "b",
+      "b",
+      "b"
+    ]
+  ],
+  "canto_relativo": [
+    -1,
+    -1
+  ],
+  "alvo_relativo": [
+    0,
+    2
+  ],
+  "origem_absoluta": [
+    1,
+    1
+  ],
+  "ultima_posicao_confirmada_relativa": [
+    0,
+    2
+  ],
+  "celulas_visitadas": 8,
+  "passos_exploracao": 14,
+  "trajeto_exploracao": [
+    [
+      0,
+      0
+    ],
+    [
+      1,
+      0
+    ],
+    [
+      2,
+      0
+    ],
+    [
+      2,
+      1
+    ],
+    [
+      2,
+      2
+    ],
+    [
+      2,
+      3
+    ],
+    [
+      2,
+      4
+    ],
+    [
+      2,
+      3
+    ],
+    [
+      2,
+      2
+    ],
+    [
+      2,
+      1
+    ],
+    [
+      2,
+      0
+    ],
+    [
+      1,
+      0
+    ],
+    [
+      0,
+      0
+    ],
+    [
+      0,
+      1
+    ],
+    [
+      0,
+      0
+    ]
+  ]
+}

@@ -145,10 +145,13 @@ class Game(Node):
         
     def run(self):
         pygame.init()
+        clock = pygame.time.Clock()
         self.running = True
         while self.running and rclpy.ok():
             self.update()
             pygame.display.flip()
+            # Evita renderização sem limite e libera CPU para a comunicação ROS.
+            clock.tick(60)
 
             if self.win and not self.win_handled:
                 self.win_handled = True
